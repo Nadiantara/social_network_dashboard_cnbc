@@ -13,9 +13,14 @@ DATA_PATH = os.path.dirname(currentdir)
 
 @st.cache_data(ttl=300)
 def load_data():
-    detik_tweet = pd.read_csv(f"{DATA_PATH}/data/all_cleaned_detik_tweet_merged.csv")
-    detik_reply = pd.read_csv(f"{DATA_PATH}/data/all_cleaned_reply_tweet_merged.csv")
+    detik_tweet = pd.read_csv(f"{DATA_PATH}/data/cnbc_tweets_cleaned_feb_2023.csv")
+    detik_reply = pd.read_csv(f"{DATA_PATH}/data/cnbc_replies_cleaned_feb_2023.csv")
     return detik_tweet, detik_reply
+
+@st.cache_data(ttl=300)
+def load_data_clusters():
+    detik_clusters = pd.read_csv(f"{DATA_PATH}/data/cnbc_tweets_txt_properties_ner_cleaned.csv")
+    return detik_clusters
 
 
 def filter_date_range(df, date_col, start_date, end_date):
@@ -221,6 +226,7 @@ def daily_engagement(df):
     df = df.rename(columns={"date_only": "date", "total_count": "total"})
     fig = px.line(df, x='date', y='total', title='Users Replies per Day')
     return fig
+
 
 def hourly_engagement(df):
     df = df.rename(columns={"hour": "hour", "total_count": "total"})
@@ -449,3 +455,73 @@ class Tweet(object):
 class TweetReply(Tweet):
     def component(self):
         return components.html(self.text, height=800)
+    
+    
+def plot_cluster(df_ner):
+    # colors
+    palette = px.colors.qualitative.Prism
+
+    # create scatter plot with hover text
+    fig = px.scatter(df_ner, x="x", y="y",color=df_ner["Cluster"].astype(str).values, color_discrete_sequence=palette,
+                    hover_data=["text", "entity", "likes"],width=800, height=650)
+
+    # show plot
+    return fig
+
+
+def cluster_clicks(df_ner):
+    df_plot_ner = df_ner.groupby(['Cluster']).agg({'clicks': 'sum'}).rename(columns={'clicks':'Total Clicks'}).reset_index().sort_values(by=['Total Clicks'], ascending = False).head(10)
+    df_plot_ner = df_plot_ner.sort_values(by=['Total Clicks'])
+    fig = px.bar(df_plot_ner,x="Cluster",y="Total Clicks", text_auto='.2s',width=750, height=350)
+    return fig
+
+def plot_entity_impressions(df_ner):
+    df_plot_ner = df_ner.groupby(['entity']).agg({'impressions': 'sum'}).reset_index().rename(columns={'impressions':'Total Impressions'}).sort_values(by=['Total Impressions'], ascending = False).head(10)
+    df_plot_ner = df_plot_ner.sort_values(by=['Total Impressions'])
+    fig = px.bar(df_plot_ner, x="Total Impressions", y="entity", text_auto='.2s')
+    return fig
+
+def plot_entity_clicks(df_ner):
+    df_plot_ner = df_ner.groupby(['entity']).agg({'clicks': 'sum'}).reset_index().rename(columns={'clicks':'Total Clicks'}).sort_values(by=['Total Clicks'], ascending = False).head(10)
+    df_plot_ner = df_plot_ner.sort_values(by=['Total Clicks'])
+    fig = px.bar(df_plot_ner, x="Total Clicks", y="entity", text_auto='.2s')
+    return fig
+
+def plot_entity_likes(df_ner):
+    df_plot_ner = df_ner.groupby(['entity']).agg({'likes': 'sum'}).reset_index().rename(columns={'likes':'Total Likes'}).sort_values(by=['Total Likes'], ascending = False).head(10)
+    df_plot_ner = df_plot_ner.sort_values(by=['Total Likes'])
+    fig = px.bar(df_plot_ner, x="Total Likes", y="entity", text_auto='.2s')
+    return fig
+
+def most_published_entities(df_ner):
+    df_plot_ner = df_ner.groupby(['entity']).agg({'entity': 'count'}).rename(columns={'entity':'Total Entities'}).reset_index().sort_values(by=['Total Entities'], ascending = False).head(10)
+    df_plot_ner = df_plot_ner.sort_values(by=['Total Entities'])
+    fig = px.bar(df_plot_ner, x="Total Entities", y="entity", text_auto='.2s')
+    return fig
+
+
+def get_top_entities(df, group_col, entity_col):
+    # group by the specified columns and count the occurrences
+    grouped = df.groupby([group_col, entity_col]).size().reset_index(name='count')
+
+    # sort by group and count in descending order
+    sorted_grouped = grouped.sort_values([group_col, 'count'], ascending=[True, False])
+
+    # extract the top entity and count for each group
+    result = sorted_grouped.groupby(group_col).head(1).reset_index(drop=True)
+    result.columns = [group_col, 'Top Entity', 'Total Entity Count']
+
+    return result
+
+def plot_popolar_entities_clusters(cluster_entity_df, group_col = "Cluster", entity_col= "entity" ):
+    # create example dataframe
+    df_plot = get_top_entities(cluster_entity_df,group_col,entity_col)
+    fig = px.bar(df_plot, x='Cluster',y='Total Entity Count', color="Top Entity",width=850, height=350)
+    fig.update_layout(
+        legend=dict(
+            title=dict(text='Top Entity')
+        )
+    )
+
+    # display the chart
+    return fig
