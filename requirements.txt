@@ -4,3 +4,4 @@ streamlit
 plotly
 requests
 altair
+st_pages
