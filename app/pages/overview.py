@@ -47,8 +47,8 @@ controversiality_diff = score_card_dict["total_controversiality_diff"]
 #random seed impression
 random_seed_start = datetime_to_integer(start_date) 
 random_seed_end =  datetime_to_integer(end_date)
-number_start = generate_random_number(1400000000,1600000000,random_seed_start)
-number_end = generate_random_number(1400000000,1600000000,random_seed_end)
+number_start = generate_random_number(1400000,1600000,random_seed_start)
+number_end = generate_random_number(1400000,1600000,random_seed_end)
 impression_diff = percentage_difference(number_start,number_end)
 
 #random seed link clicks
@@ -79,7 +79,16 @@ lineplot4 = altair_sum_timeseries(controversiality_concat,"Daily Controversialit
 lineplot5 = hourly_engagement(result_dict["reply_per_hour"])
 
 st.altair_chart(lineplot1, use_container_width=True)
+
+df_tweets_this_period = tweet_concat[tweet_concat["period"]=="This Period"]
+df_tweets_popularity_this_period = popularity_concat[popularity_concat["period"]=="This Period"]
+with st.container():
+   with st.expander("See Published Tweets Table"):
+        st.dataframe(df_tweets_this_period.iloc[:,:2])
 st.altair_chart(lineplot2, use_container_width=True)
+with st.container():
+   with st.expander("See Daily Popularity Table"):
+        st.dataframe(df_tweets_popularity_this_period.iloc[:,:2])
 #st.plotly_chart(lineplot2)
 st.plotly_chart(lineplot3)
 st.altair_chart(lineplot4, use_container_width=True)

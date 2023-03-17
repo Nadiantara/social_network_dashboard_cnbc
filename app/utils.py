@@ -478,25 +478,25 @@ def cluster_clicks(df_ner):
 def plot_entity_impressions(df_ner):
     df_plot_ner = df_ner.groupby(['entity']).agg({'impressions': 'sum'}).reset_index().rename(columns={'impressions':'Total Impressions'}).sort_values(by=['Total Impressions'], ascending = False).head(10)
     df_plot_ner = df_plot_ner.sort_values(by=['Total Impressions'])
-    fig = px.bar(df_plot_ner, x="Total Impressions", y="entity", text_auto='.2s')
+    fig = px.bar(df_plot_ner, x="Total Impressions", y="entity", text_auto='.2s', width=350,)
     return fig
 
 def plot_entity_clicks(df_ner):
     df_plot_ner = df_ner.groupby(['entity']).agg({'clicks': 'sum'}).reset_index().rename(columns={'clicks':'Total Clicks'}).sort_values(by=['Total Clicks'], ascending = False).head(10)
     df_plot_ner = df_plot_ner.sort_values(by=['Total Clicks'])
-    fig = px.bar(df_plot_ner, x="Total Clicks", y="entity", text_auto='.2s')
+    fig = px.bar(df_plot_ner, x="Total Clicks", y="entity", text_auto='.2s', width=350,)
     return fig
 
 def plot_entity_likes(df_ner):
     df_plot_ner = df_ner.groupby(['entity']).agg({'likes': 'sum'}).reset_index().rename(columns={'likes':'Total Likes'}).sort_values(by=['Total Likes'], ascending = False).head(10)
     df_plot_ner = df_plot_ner.sort_values(by=['Total Likes'])
-    fig = px.bar(df_plot_ner, x="Total Likes", y="entity", text_auto='.2s')
+    fig = px.bar(df_plot_ner, x="Total Likes", y="entity", text_auto='.2s', width=350)
     return fig
 
 def most_published_entities(df_ner):
     df_plot_ner = df_ner.groupby(['entity']).agg({'entity': 'count'}).rename(columns={'entity':'Total Entities'}).reset_index().sort_values(by=['Total Entities'], ascending = False).head(10)
     df_plot_ner = df_plot_ner.sort_values(by=['Total Entities'])
-    fig = px.bar(df_plot_ner, x="Total Entities", y="entity", text_auto='.2s')
+    fig = px.bar(df_plot_ner, x="Total Entities", y="entity", text_auto='.2s', width=350)
     return fig
 
 

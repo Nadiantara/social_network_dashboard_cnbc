@@ -40,39 +40,39 @@ with st.container():
    with st.expander("See Popular Tweets"):
       col1, col2 = st.columns(2)
       with col1:
-         st.header("#1 Tweet")
+         st.markdown("### 1st Tweet")
          t = Tweet(f"https://twitter.com/cnbcindonesia/status/{top_popular_tweets_list[0]}").component()
 
       with col2:
-         st.header("#2 Tweet")
+         st.markdown("### 2nd Tweet")
          t = Tweet(f"https://twitter.com/cnbcindonesia/status/{top_popular_tweets_list[1]}").component()
          
       col3, col4 = st.columns(2)
 
       with col3:
-         st.header("#3 Tweet")
+         st.markdown("### 3rd Tweet")
          t = Tweet(f"https://twitter.com/cnbcindonesia/status/{top_popular_tweets_list[2]}").component()
 
       with col4:
-         st.header("#4 Tweet")
+         st.markdown("### 4th Tweet")
          t = Tweet(f"https://twitter.com/cnbcindonesia/status/{top_popular_tweets_list[3]}").component()
  
 with st.container():  
    with st.expander("See Popular Replies"):
       col5, col6 = st.columns(2)
       with col5:
-         st.header("#1 Reply")
+         st.markdown("### 1st Reply")
          t = TweetReply(f"https://twitter.com/{top_popular_replies_name[0]}/status/{top_popular_replies_list[0]}").component()
 
       with col6:
-         st.header("#2 Reply")
+         st.markdown("### 2nd Reply")
          t = TweetReply(f"https://twitter.com/{top_popular_replies_name[1]}/status/{top_popular_replies_list[1]}").component()
          
       col7, col8 = st.columns(2)
       with col7:
-         st.header("#3 Reply")
+         st.markdown("### 3rd Reply")
          t = TweetReply(f"https://twitter.com/{top_popular_replies_name[0]}/status/{top_popular_replies_list[2]}").component()
 
       with col8:
-         st.header("#4 Reply")
+         st.markdown("### 4th Reply")
          t = TweetReply(f"https://twitter.com/{top_popular_replies_name[1]}/status/{top_popular_replies_list[3]}").component()
