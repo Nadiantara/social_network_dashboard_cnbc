@@ -464,6 +464,12 @@ def plot_cluster(df_ner):
     # create scatter plot with hover text
     fig = px.scatter(df_ner, x="x", y="y",color=df_ner["Cluster"].astype(str).values, color_discrete_sequence=palette,
                     hover_data=["text", "entity", "likes"],width=800, height=650)
+    fig.update_layout(
+        legend=dict(
+            title=dict(text='Tweet's Clusters')
+        )
+    )
+
 
     # show plot
     return fig
