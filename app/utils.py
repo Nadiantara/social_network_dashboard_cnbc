@@ -466,12 +466,10 @@ def plot_cluster(df_ner):
                     hover_data=["text", "entity", "likes"],width=800, height=650)
     fig.update_layout(
         legend=dict(
-            title=dict(text='Tweet's Clusters')
+            title=dict(text='Tweets Cluster')
         )
     )
 
-
-    # show plot
     return fig
 
 
