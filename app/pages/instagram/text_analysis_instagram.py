@@ -10,7 +10,7 @@ st.set_page_config(page_title="Twitter Entity Analysis", page_icon="🌍")
 
 st.markdown("## Twitter Entity Analysis")
 
-df_cluster = load_data_clusters()
+df_cluster = load_data_twitter_clusters()
 
 cluster_plot = plot_cluster(df_cluster)
 cluster_top_entities_plot = plot_popolar_entities_clusters(df_cluster)

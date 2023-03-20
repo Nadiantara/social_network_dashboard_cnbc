@@ -12,13 +12,13 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 DATA_PATH = os.path.dirname(currentdir)
 
 @st.cache_data(ttl=300)
-def load_data():
+def load_data_twitter():
     detik_tweet = pd.read_csv(f"{DATA_PATH}/data/cnbc_tweets_new_replacement.csv")
     detik_reply = pd.read_csv(f"{DATA_PATH}/data/cnbc_replies_cleaned_feb_2023.csv")
     return detik_tweet, detik_reply
 
 @st.cache_data(ttl=300)
-def load_data_clusters():
+def load_data_twitter_clusters():
     detik_clusters = pd.read_csv(f"{DATA_PATH}/data/cnbc_tweets_txt_properties_ner_cleaned.csv")
     return detik_clusters
 

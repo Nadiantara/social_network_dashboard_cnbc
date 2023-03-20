@@ -17,7 +17,7 @@ st.set_page_config(
 start_date = st.sidebar.date_input("Start date", value=date(2023, 3, 4))
 end_date = st.sidebar.date_input("End date", value=date(2023, 3, 7))
 
-df_tweet, df_reply = load_data()
+df_tweet, df_reply = load_data_twitter()
 
 # Convert date column to datetime format
 df_tweet['date'] = pd.to_datetime(df_tweet['date'])

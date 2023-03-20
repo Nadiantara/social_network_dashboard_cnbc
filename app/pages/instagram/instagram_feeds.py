@@ -1,20 +1,21 @@
 import streamlit as st
 import pandas as pd
 from datetime import date
-from utils_twitter import *
+from utils_instagram import *
 
-detik_tweet, detik_reply = load_data_twitter()
+detik_tweet = load_data_instagram_clusters()
 
 def set_data( start_date, end_date, sortby, filterby):
-    data = detik_tweet.drop_duplicates(subset=['id'])
+    df = detik_tweet.drop_duplicates(subset=['post id'])
+    data = df.dropna(subset=['text'])
     data = data[ (data['date'] >= start_date) & (data['date'] <= end_date) ]
 
     if sortby == "Most Popular":
-        data = data.sort_values(by='popularity_score', ascending=False)
-    elif sortby == "Most Controversial":
-        data = data.sort_values(by='controversiality_score', ascending=False)
-    elif sortby == "Most Clicks":
-        data = data.sort_values(by='clicks', ascending=False)
+        data = data.sort_values(by='interactions', ascending=False)
+    elif sortby == "Most Comments":
+        data = data.sort_values(by='comments', ascending=False)
+    elif sortby == "Most Viewed":
+        data = data.sort_values(by='impressions', ascending=False)
 
 
     if filterby == "All":
@@ -34,7 +35,7 @@ def set_feed(data):
 
     for index, row in data.iterrows():
         cont = st.container()
-        cont.markdown('### %s' % row['content'])
+        cont.markdown('### %s' % row['text'])
 
         col1, col2, col3, col4 = cont.columns(4)
 
@@ -44,9 +45,9 @@ def set_feed(data):
             col1.metric("Sentiment", "Negatif ❌")
         elif row['sentiment_overall'] == 'neutral':
             col1.metric("Sentiment", "Neutral ⏸️")
-        col2.metric("Popularity Score", "%s 👍🏻" % int(row['popularity_score']))
-        col3.metric("Controversiality Score", "%s 💬" % int(row['controversiality_score']))
-        col4.metric("Clicks", "%s 🚀" % int(row['clicks']))
+        col2.metric("Popularity Score", "%s 👍🏻" % int(row['interactions']))
+        col3.metric("Commented", "%s 💬" % int(row['comments']))
+        col4.metric("Impressions", "%s 🚀" % int(row['impressions']))
         cont.markdown("""---""")
 
 
@@ -57,7 +58,7 @@ if __name__ == "__main__":
     end_date = st.sidebar.date_input("End date", value=date(2023, 3, 7)).strftime("%Y-%m-%d")
     sortby = st.sidebar.selectbox(
         "Sort Content By",
-        ("Most Popular", "Most Controversial", "Most Clicks")
+        ("Most Popular", "Most Comments", "Most Viewed")
     )
 
     filterby = st.sidebar.selectbox(

@@ -12,14 +12,14 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 DATA_PATH = os.path.dirname(currentdir)
 
 @st.cache_data(ttl=300)
-def load_data():
-    detik_tweet = pd.read_csv(f"{DATA_PATH}/data/cnbc_tweets_new_replacement.csv")
-    detik_reply = pd.read_csv(f"{DATA_PATH}/data/cnbc_replies_cleaned_feb_2023.csv")
+def load_data_instagram():
+    detik_tweet = pd.read_csv(f"{DATA_PATH}/data/cnbc_ig_post_raw.csv")
+    detik_reply = pd.read_csv(f"{DATA_PATH}/data/cnbc_ig_grouped_by_date.csv")
     return detik_tweet, detik_reply
 
 @st.cache_data(ttl=300)
-def load_data_clusters():
-    detik_clusters = pd.read_csv(f"{DATA_PATH}/data/cnbc_tweets_txt_properties_ner_cleaned.csv")
+def load_data_instagram_clusters():
+    detik_clusters = pd.read_csv(f"{DATA_PATH}/data/cnbc_ig_posts_txt_properties_ner.csv")
     return detik_clusters
 
 
@@ -120,26 +120,26 @@ def sum_by_group(df, group_col, sum_col):
     return result
 
 @st.cache_data(ttl=300)
-def filtering_wrap(df_tweet, df_reply, start_date, end_date):
+def filtering_wrap(df_tweet, start_date, end_date):
     # detik's tweet
     tweet_filtered = filter_date_range(df_tweet, "date", start_date, end_date)
-    tweet_per_date = count_by_group(tweet_filtered, "date", "id")
-    #tweet_per_hour = count_by_group(tweet_filtered, "hour", "id")
+    tweet_per_date = count_by_group(tweet_filtered, "date", "post id")
+    #tweet_per_hour = count_by_group(tweet_filtered, "hour", "post id")
     tweet_filtered_previous = filter_by_date_with_previous_period(df_tweet, "date", start_date, end_date)
-    tweet_per_date_previous = count_by_group(tweet_filtered_previous, "date", "id")
-    #tweet_per_hour_previous = count_by_group(tweet_filtered_previous, "hour", "id")
+    tweet_per_date_previous = count_by_group(tweet_filtered_previous, "date", "post id")
+    #tweet_per_hour_previous = count_by_group(tweet_filtered_previous, "hour", "post id")
     
-    #popularity score
-    popularity_per_date = sum_by_group(tweet_filtered, "date", "popularity_score")
-    #popularity_per_hour = sum_by_group(tweet_filtered, "hour", "popularity_score")
-    popularity_per_date_previous = sum_by_group(tweet_filtered_previous, "date", "popularity_score")
-    #popularity_per_hour_previous = sum_by_group(tweet_filtered_previous, "hour", "popularity_score")
+    #interactions score
+    interactions_per_date = sum_by_group(tweet_filtered, "date", "interactions")
+    #interactions_per_hour = sum_by_group(tweet_filtered, "hour", "interactions")
+    interactions_per_date_previous = sum_by_group(tweet_filtered_previous, "date", "interactions")
+    #interactions_per_hour_previous = sum_by_group(tweet_filtered_previous, "hour", "interactions")
     
-    #controversiality score
-    controversiality_per_date = sum_by_group(tweet_filtered, "date", "controversiality_score")
-    #controversiality_per_hour = sum_by_group(tweet_filtered, "hour", "controversiality_score")
-    controversiality_per_date_previous = sum_by_group(tweet_filtered_previous, "date", "controversiality_score")
-    #controversiality_per_hour_previous = sum_by_group(tweet_filtered_previous, "hour", "controversiality_score")
+    #replies score
+    replies_per_date = sum_by_group(tweet_filtered, "date", "comments")
+    #replies_per_hour = sum_by_group(tweet_filtered, "hour", "replies")
+    replies_per_date_previous = sum_by_group(tweet_filtered_previous, "date", "comments")
+    #replies_per_hour_previous = sum_by_group(tweet_filtered_previous, "hour", "replies")
     
     #impressions score
     impressions_per_date = sum_by_group(tweet_filtered, "date", "impressions")
@@ -148,57 +148,34 @@ def filtering_wrap(df_tweet, df_reply, start_date, end_date):
     #impressions_per_hour_previous = sum_by_group(tweet_filtered_previous, "hour", "impressions")
     
         
-    #Clicks score
-    clicks_per_date = sum_by_group(tweet_filtered, "date", "clicks")
-    #clicks_per_hour = sum_by_group(tweet_filtered, "hour", "clicks")
-    clicks_per_date_previous = sum_by_group(tweet_filtered_previous, "date", "clicks")
-    #clicks_per_hour_previous = sum_by_group(tweet_filtered_previous, "hour", "clicks")
-
-
-    # reply
-    reply_filtered = filter_date_range(df_reply, "date_only", start_date, end_date)
-    reply_per_date = count_by_group(reply_filtered, "date_only", "reply_id")
-    #reply_per_hour = count_by_group(reply_filtered, "hour", "reply_id")
-    reply_filtered_previous = filter_by_date_with_previous_period(df_reply, "date_only", start_date, end_date)
-    reply_per_date_previous = count_by_group(reply_filtered_previous, "date_only", "reply_id")
-    #reply_per_hour_previous = count_by_group(reply_filtered_previous, "hour", "reply_id")
-
-    # popular and controversial
-    top_popular_tweets = tweet_filtered.sort_values(by="popularity_score", ascending=False).head(4)
-    top_popular_replies = reply_filtered.sort_values(by="popularity_score", ascending=False).head(4)
-    top_controversial_tweets = tweet_filtered.sort_values(by="controversiality_score", ascending=False).head(4)
-    top_controversial_replies = reply_filtered.sort_values(by="controversiality_score", ascending=False).head(4)
+    #reach score
+    reach_per_date = sum_by_group(tweet_filtered, "date", "reach")
+    #reach_per_hour = sum_by_group(tweet_filtered, "hour", "reach")
+    reach_per_date_previous = sum_by_group(tweet_filtered_previous, "date", "reach")
+    #reach_per_hour_previous = sum_by_group(tweet_filtered_previous, "hour", "reach")
     
     result_dict = {
         "tweet_per_date": tweet_per_date,
         #"tweet_per_hour": tweet_per_hour,
         "tweet_per_date_previous": tweet_per_date_previous,
         #"tweet_per_hour_previous": tweet_per_hour_previous,
-        "popularity_per_date": popularity_per_date,
-        #"popularity_per_hour": popularity_per_hour,
-        "popularity_per_date_previous": popularity_per_date_previous,
-        #"popularity_per_hour_previous": popularity_per_hour_previous,
-        "controversiality_per_date": controversiality_per_date,
-        #"controversiality_per_hour": controversiality_per_hour,
-        "controversiality_per_date_previous": controversiality_per_date_previous,
-        #"controversiality_per_hour_previous": controversiality_per_hour_previous,
+        "interactions_per_date": interactions_per_date,
+        #"interactions_per_hour": interactions_per_hour,
+        "interactions_per_date_previous": interactions_per_date_previous,
+        #"interactions_per_hour_previous": interactions_per_hour_previous,
+        "replies_per_date": replies_per_date,
+        #"replies_per_hour": replies_per_hour,
+        "replies_per_date_previous": replies_per_date_previous,
+        #"replies_per_hour_previous": replies_per_hour_previous,
         "impressions_per_date": impressions_per_date,
         #"impressions_per_hour": impressions_per_hour,
         "impressions_per_date_previous": impressions_per_date_previous,
         #"impressions_per_hour_previous": impressions_per_hour_previous,
-        "clicks_per_date": clicks_per_date,
-        #"clicks_per_hour": clicks_per_hour,
-        "clicks_per_date_previous": clicks_per_date_previous,
-        #"clicks_per_hour_previous": clicks_per_hour_previous,
-        "reply_per_date": reply_per_date,
-        #"reply_per_hour": reply_per_hour,
-        "reply_per_date_previous": reply_per_date_previous,
-        #"reply_per_hour_previous": reply_per_hour_previous,
-        "top_popular_tweets": top_popular_tweets,
-        "top_popular_replies": top_popular_replies,
-        "top_controversial_tweets": top_controversial_tweets,
-        "top_controversial_replies": top_controversial_replies,
-    }
+        "reach_per_date": reach_per_date,
+        #"reach_per_hour": reach_per_hour,
+        "reach_per_date_previous": reach_per_date_previous,
+        #"reach_per_hour_previous": reach_per_hour_previous,
+                                                                }
 
     return result_dict
     
@@ -234,14 +211,14 @@ def daily_tweet(df):
     fig = px.line(df, x='date', y='total', title='Total Tweet Published per Day')
     return fig
 
-def daily_popularity(df):
+def daily_interactions(df):
     df = df.rename(columns={"date_only": "date", "total_value": "total"})
-    fig = px.line(df, x='date', y='total', title=' Tweet Popularity per Day')
+    fig = px.line(df, x='date', y='total', title=' Tweet interactions per Day')
     return fig
 
-def hourly_popularity(df):
+def hourly_interactions(df):
     df = df.rename(columns={"total_value": "total"})
-    fig = px.line(df, x='hour', y='total', title=' Tweet Popularity per Hour').update_traces(line=dict(color='red'))
+    fig = px.line(df, x='hour', y='total', title=' Tweet interactions per Hour').update_traces(line=dict(color='red'))
     return fig
 
 def daily_engagement(df):
@@ -389,36 +366,36 @@ def calc_period_percent_diff(df):
     return this_period_sum, percent_diff
 
 
-def score_card_wrap(tweet_per_date,tweet_per_date_previous,popularity_per_date,popularity_per_date_previous,
-                    controversiality_per_date,controversiality_per_date_previous,
+def score_card_wrap(tweet_per_date,tweet_per_date_previous,interactions_per_date,interactions_per_date_previous,
+                    replies_per_date,replies_per_date_previous,
                     impressions_per_date,impressions_per_date_previous,
-                    clicks_per_date,clicks_per_date_previous):
+                    reach_per_date,reach_per_date_previous):
     total_tweets_concat = compute_now_previous(tweet_per_date,tweet_per_date_previous)
     total_tweets, total_tweets_diff = calc_period_percent_diff(total_tweets_concat)
-    total_popularity_concat = compute_now_previous(popularity_per_date,popularity_per_date_previous)
-    total_popularity, total_popularity_diff = calc_period_percent_diff(total_popularity_concat)
-    total_controversiality_concat = compute_now_previous(controversiality_per_date,controversiality_per_date_previous)
-    total_controversiality, total_controversiality_diff = calc_period_percent_diff(total_controversiality_concat)
+    total_interactions_concat = compute_now_previous(interactions_per_date,interactions_per_date_previous)
+    total_interactions, total_interactions_diff = calc_period_percent_diff(total_interactions_concat)
+    total_replies_concat = compute_now_previous(replies_per_date,replies_per_date_previous)
+    total_replies, total_replies_diff = calc_period_percent_diff(total_replies_concat)
     total_impressions_concat = compute_now_previous(impressions_per_date,impressions_per_date_previous)
     total_impressions, total_impressions_diff = calc_period_percent_diff(total_impressions_concat)
-    total_clicks_concat = compute_now_previous(clicks_per_date,clicks_per_date_previous)
-    total_clicks, total_clicks_diff = calc_period_percent_diff(total_clicks_concat)
+    total_reach_concat = compute_now_previous(reach_per_date,reach_per_date_previous)
+    total_reach, total_reach_diff = calc_period_percent_diff(total_reach_concat)
     result_dict = {
         'total_tweets_concat':total_tweets_concat,
         'total_tweets': total_tweets,
         'total_tweets_diff': total_tweets_diff,
-        'total_popularity': total_popularity,
-        "total_popularity_concat": total_popularity_concat,
-        'total_popularity_diff': total_popularity_diff,
-        'total_controversiality': total_controversiality,
-        'total_controversiality_concat': total_controversiality_concat,
-        'total_controversiality_diff': total_controversiality_diff,
+        'total_interactions': total_interactions,
+        "total_interactions_concat": total_interactions_concat,
+        'total_interactions_diff': total_interactions_diff,
+        'total_replies': total_replies,
+        'total_replies_concat': total_replies_concat,
+        'total_replies_diff': total_replies_diff,
         'total_impressions': total_impressions,
         'total_impressions_concat': total_impressions_concat,
         'total_impressions_diff': total_impressions_diff,
-        'total_clicks': total_clicks,
-        'total_clicks_concat': total_clicks_concat,
-        'total_clicks_diff': total_clicks_diff }
+        'total_reach': total_reach,
+        'total_reach_concat': total_reach_concat,
+        'total_reach_diff': total_reach_diff }
     return result_dict
 
 def datetime_to_integer(date_object):
@@ -506,10 +483,10 @@ def plot_cluster(df_ner):
     return fig
 
 
-def cluster_clicks(df_ner):
-    df_plot_ner = df_ner.groupby(['Cluster']).agg({'clicks': 'sum'}).rename(columns={'clicks':'Total Clicks'}).reset_index().sort_values(by=['Total Clicks'], ascending = False).head(10)
-    df_plot_ner = df_plot_ner.sort_values(by=['Total Clicks'])
-    fig = px.bar(df_plot_ner,x="Cluster",y="Total Clicks", text_auto='.2s',width=750, height=350)
+def cluster_reach(df_ner):
+    df_plot_ner = df_ner.groupby(['Cluster']).agg({'reach': 'sum'}).rename(columns={'reach':'Total reach'}).reset_index().sort_values(by=['Total reach'], ascending = False).head(10)
+    df_plot_ner = df_plot_ner.sort_values(by=['Total reach'])
+    fig = px.bar(df_plot_ner,x="Cluster",y="Total reach", text_auto='.2s',width=750, height=350)
     return fig
 
 def plot_entity_impressions(df_ner):
@@ -518,10 +495,10 @@ def plot_entity_impressions(df_ner):
     fig = px.bar(df_plot_ner, x="Total Impressions", y="entity", text_auto='.2s', width=350,)
     return fig
 
-def plot_entity_clicks(df_ner):
-    df_plot_ner = df_ner.groupby(['entity']).agg({'clicks': 'sum'}).reset_index().rename(columns={'clicks':'Total Clicks'}).sort_values(by=['Total Clicks'], ascending = False).head(10)
-    df_plot_ner = df_plot_ner.sort_values(by=['Total Clicks'])
-    fig = px.bar(df_plot_ner, x="Total Clicks", y="entity", text_auto='.2s', width=350,)
+def plot_entity_reach(df_ner):
+    df_plot_ner = df_ner.groupby(['entity']).agg({'reach': 'sum'}).reset_index().rename(columns={'reach':'Total reach'}).sort_values(by=['Total reach'], ascending = False).head(10)
+    df_plot_ner = df_plot_ner.sort_values(by=['Total reach'])
+    fig = px.bar(df_plot_ner, x="Total reach", y="entity", text_auto='.2s', width=350,)
     return fig
 
 def plot_entity_likes(df_ner):
