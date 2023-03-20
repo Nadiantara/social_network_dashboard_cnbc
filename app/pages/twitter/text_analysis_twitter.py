@@ -6,9 +6,9 @@ from utils_twitter import *
 
 
 
-st.set_page_config(page_title="Twitter Entity Analysis", page_icon="🌍")
+st.set_page_config(page_title="Twitter Content Analysis", page_icon="🌍")
 
-st.markdown("## Twitter Entity Analysis")
+st.markdown("## Twitter Content Analysis")
 
 df_cluster = load_data_twitter_clusters()
 

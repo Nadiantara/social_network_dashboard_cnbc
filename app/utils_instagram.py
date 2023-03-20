@@ -20,8 +20,28 @@ def load_data_instagram():
 @st.cache_data(ttl=300)
 def load_data_instagram_clusters():
     detik_clusters = pd.read_csv(f"{DATA_PATH}/data/cnbc_ig_posts_txt_properties_ner.csv")
+    detik_clusters = filter_values(detik_clusters,"entity",["cn","cnbc","com","cnbcindonesia","cnbcindonesiacom","bc"])
     return detik_clusters
 
+def filter_values(df, column_name, values_to_filter):
+    """
+    Filters out rows from a column in a Pandas DataFrame that contain specific values.
+
+    Parameters:
+    df (pandas.DataFrame): The DataFrame to filter.
+    column_name (str): The name of the column to filter.
+    values_to_filter (list): A list of values to filter out.
+
+    Returns:
+    pandas.DataFrame: The filtered DataFrame.
+    """
+    # create a boolean mask to identify rows containing values to filter out
+    mask = df[column_name].isin(values_to_filter)
+
+    # filter out the rows containing the specified values
+    df_filtered = df[~mask]
+    
+    return df_filtered
 
 def filter_date_range(df, date_col, start_date, end_date):
     """Filter a pandas DataFrame based on a date range.
@@ -476,7 +496,7 @@ def plot_cluster(df_ner):
                     hover_data=["text", "entity", "likes"],width=800, height=650)
     fig.update_layout(
         legend=dict(
-            title=dict(text='Tweets Cluster')
+            title=dict(text='Instagram Cluster')
         )
     )
 
@@ -495,16 +515,16 @@ def plot_entity_impressions(df_ner):
     fig = px.bar(df_plot_ner, x="Total Impressions", y="entity", text_auto='.2s', width=350,)
     return fig
 
-def plot_entity_reach(df_ner):
-    df_plot_ner = df_ner.groupby(['entity']).agg({'reach': 'sum'}).reset_index().rename(columns={'reach':'Total reach'}).sort_values(by=['Total reach'], ascending = False).head(10)
-    df_plot_ner = df_plot_ner.sort_values(by=['Total reach'])
-    fig = px.bar(df_plot_ner, x="Total reach", y="entity", text_auto='.2s', width=350,)
+def plot_entity_interactions(df_ner):
+    df_plot_ner = df_ner.groupby(['entity']).agg({'interactions': 'sum'}).reset_index().rename(columns={'interactions':'Total interactions'}).sort_values(by=['Total interactions'], ascending = False).head(10)
+    df_plot_ner = df_plot_ner.sort_values(by=['Total interactions'])
+    fig = px.bar(df_plot_ner, x="Total interactions", y="entity", text_auto='.2s', width=350,)
     return fig
 
-def plot_entity_likes(df_ner):
-    df_plot_ner = df_ner.groupby(['entity']).agg({'likes': 'sum'}).reset_index().rename(columns={'likes':'Total Likes'}).sort_values(by=['Total Likes'], ascending = False).head(10)
-    df_plot_ner = df_plot_ner.sort_values(by=['Total Likes'])
-    fig = px.bar(df_plot_ner, x="Total Likes", y="entity", text_auto='.2s', width=350)
+def plot_entity_shares(df_ner):
+    df_plot_ner = df_ner.groupby(['entity']).agg({'comments': 'sum'}).reset_index().rename(columns={'comments':'Total comments'}).sort_values(by=['Total comments'], ascending = False).head(10)
+    df_plot_ner = df_plot_ner.sort_values(by=['Total comments'])
+    fig = px.bar(df_plot_ner, x="Total comments", y="entity", text_auto='.2s', width=350)
     return fig
 
 def most_published_entities(df_ner):
@@ -527,7 +547,7 @@ def get_top_entities(df, group_col, entity_col):
 
     return result
 
-def plot_popolar_entities_clusters(cluster_entity_df, group_col = "Cluster", entity_col= "entity" ):
+def plot_popular_entities_clusters(cluster_entity_df, group_col = "Cluster", entity_col= "entity" ):
     # create example dataframe
     df_plot = get_top_entities(cluster_entity_df,group_col,entity_col)
     fig = px.bar(df_plot, x='Cluster',y='Total Entity Count', color="Top Entity",width=850, height=350)
