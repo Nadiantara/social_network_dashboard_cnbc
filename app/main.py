@@ -3,6 +3,8 @@ from st_pages import Page, show_pages, add_page_title
 
 import os,sys,inspect
 
+st.set_page_config(layout="wide")
+
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 DATA_PATH = os.path.dirname(currentdir)
 
@@ -14,9 +16,9 @@ with st.container():
 show_pages(
     [
         Page(f"app/main.py", "Home Page", "🏠"),
-        Page(f"app/pages/overview.py", "Performance Overview", "🔭"),
-        Page(f"app/pages/popular_tweets.py", "Popular Tweets and Replies", "👁️"),
-        Page(f"app/pages/topic_sentiment.py", "Text Analysis", "⚖️")
+        Page(f"app/pages/twitter/overview_twitter.py", " Twitter Performance Overview", "🔭"),
+        Page(f"app/pages/twitter/twitter_feeds.py", "Twitter Feeds", "👁️"),
+        Page(f"app/pages/twitter/text_analysis_twitter.py", "Twitter Text Analysis", "⚖️")
     ]
 )
 
