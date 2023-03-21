@@ -38,6 +38,8 @@ with col4:
     st.markdown("##### Top 10 Entities by Likes")
     st.plotly_chart(top_entities_likes)
 
+
+
 st.markdown("##### Tweets Text Clusters")   
 st.plotly_chart(cluster_plot)
 st.markdown("##### Clicks per Clusters")
