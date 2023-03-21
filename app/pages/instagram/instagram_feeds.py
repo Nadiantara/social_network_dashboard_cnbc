@@ -53,7 +53,7 @@ def set_feed(data):
             col1.metric("Sentiment", "Neutral ⏸️")
         col2.metric("Popularity Score", "%s 👍🏻" % int(row['interactions']))
         col3.metric("Commented", "%s 💬" % int(row['comments']))
-        col4.metric("Impressions", "%s 🚀" % int(row['impressions']))
+        col4.metric("Impressions", "%s 🚀" % format_large_number(int(row['impressions'])))
         cont.markdown("""---""")
 
 

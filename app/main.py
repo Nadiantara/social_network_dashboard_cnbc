@@ -22,13 +22,13 @@ with st.container():
 show_pages(
     [
         Page(f"app/main.py", "Home Page", "🏠"),
-        Page(f"app/all_social_media_overview.py", "All Media Overview", "🏠"),
-        Page(f"app/pages/twitter/overview_twitter.py", " Twitter Performance Overview", "🔭"),
-        Page(f"app/pages/twitter/twitter_feeds.py", "Twitter Feeds", "👁️"),
-        Page(f"app/pages/twitter/text_analysis_twitter.py", "Twitter Content Analysis", "⚖️"),
-        Page(f"app/pages/instagram/overview_instagram.py", " Instagram Performance Overview", "🔭"),
-        Page(f"app/pages/instagram/instagram_feeds.py", " Instagram Feeds", "👁️"),
-        Page(f"app/pages/instagram/text_analysis_instagram.py", " Instagram Content Analysis", "👁️")
+        Page(f"app/all_social_media_overview.py", "All Media Overview", "📈"),
+        Page(f"app/pages/twitter/overview_twitter.py", " Twitter Performance Overview", "🐦"),
+        Page(f"app/pages/twitter/twitter_feeds.py", "Twitter Feeds", "🐦"),
+        Page(f"app/pages/twitter/text_analysis_twitter.py", "Twitter Content Analysis", "🐦"),
+        Page(f"app/pages/instagram/overview_instagram.py", " Instagram Performance Overview", "📷"),
+        Page(f"app/pages/instagram/instagram_feeds.py", " Instagram Feeds", "📷"),
+        Page(f"app/pages/instagram/text_analysis_instagram.py", " Instagram Content Analysis", "📷")
     ]
 )
 
@@ -45,11 +45,16 @@ st.markdown(
     """
     ### Select on the left panel what you want to explore:
     -  Performance Overview Metrics:
-        - Popularity Score -> total likes + total retweets
-        - Controversiality Score -> total quote tweets + total replies
-        - Impression -> how many times our tweets are being viewed
+        - Twitter:
+            - Popularity Score -> total likes + total retweets
+            - Controversiality Score -> total quote tweets + total replies
+            - Impression -> how many times our tweets are being viewed
+        - Instagram:
+            - Interactions -> total likes + total comments + total shares + total post saved
+            - Impressions -> Non-Uniqe views
+            - Reach -> Unique views
     - Text Analysis:
-        - Tweets clustering
+        - Content text clustering
         - Entity recognition
         - Sentiment Analysis
     """
