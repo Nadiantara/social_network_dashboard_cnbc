@@ -16,7 +16,7 @@ st.set_page_config(
 
 # Create a sidebar with a date input
 start_date = st.sidebar.date_input("Start date", value=date(2023, 3, 4))
-end_date = st.sidebar.date_input("End date", value=date(2023, 3, 6))
+end_date = st.sidebar.date_input("End date", value=date(2023, 3, 7))
 
 df_tweet, df_reply = load_data_twitter()
 
