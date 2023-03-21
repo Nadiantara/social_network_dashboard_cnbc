@@ -35,8 +35,14 @@ def set_feed(data):
 
     for index, row in data.iterrows():
         cont = st.container()
-        cont.markdown('### %s' % row['text'])
-
+        
+        lines = row['text'].splitlines()
+        cont.markdown('### %s' % lines[0])
+        c1, c2 = cont.columns(2)
+        c1.markdown('%s ([link](%s))' % ("go to source:", row['link post']))
+        c2.markdown(row['date'])
+        cont.markdown('> %s' % " ".join(lines[1:]))
+        # cont.markdown('> %s' % row['summary'])
         col1, col2, col3, col4 = cont.columns(4)
 
         if row['sentiment_overall'] == 'positive':
@@ -53,7 +59,7 @@ def set_feed(data):
 
 
 if __name__ == "__main__":
-    st.markdown("# Trending Content Feed")
+    st.markdown("# Instagram Content Feed")
     start_date = st.sidebar.date_input("Start date", value=date(2023, 3, 4)).strftime("%Y-%m-%d")
     end_date = st.sidebar.date_input("End date", value=date(2023, 3, 7)).strftime("%Y-%m-%d")
     sortby = st.sidebar.selectbox(
