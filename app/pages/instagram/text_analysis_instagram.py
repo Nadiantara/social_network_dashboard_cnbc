@@ -38,6 +38,10 @@ with col4:
     st.markdown("##### Top 10 Entities by Comments")
     st.plotly_chart(top_entities_shares)
     
+st.markdown("##### Instagram Text Clusters")     
 st.plotly_chart(cluster_plot)
+    
+st.markdown("##### Instagram Clicks per Clusters")   
 st.plotly_chart(cluster_clicks_plot)
+st.markdown("##### Instagram Top Entities per Clusters")   
 st.plotly_chart(cluster_top_entities_plot)

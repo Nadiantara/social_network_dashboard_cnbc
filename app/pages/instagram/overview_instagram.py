@@ -29,11 +29,11 @@ start_date = datetime.combine(start_date, datetime.min.time())
 end_date = datetime.combine(end_date, datetime.min.time())
 
 # Filter the data based on the date input
-result_dict = filtering_wrap(df_tweet,start_date, end_date)
+result_dict = filtering_wrap_ig(df_tweet,start_date, end_date)
 
 #score card
 
-score_card_dict = score_card_wrap(result_dict["tweet_per_date"],result_dict["tweet_per_date_previous"],
+score_card_dict = score_card_wrap_ig(result_dict["tweet_per_date"],result_dict["tweet_per_date_previous"],
                                   result_dict["interactions_per_date"],result_dict["interactions_per_date_previous"],
                     result_dict["replies_per_date"], result_dict["replies_per_date_previous"],
                     result_dict["impressions_per_date"], result_dict["impressions_per_date_previous"],
@@ -110,10 +110,3 @@ with st.container():
 #st.plotly_chart(lineplot3)
 st.altair_chart(controversialities_plot, use_container_width=True)
 #st.plotly_chart(lineplot5)
-
-
-""" suppose i have a dataframe that contains two columns, 
-"date"(date)  and "twitter_followers" (integer). Write a functions with input "start_date" and "end_date" 
-and return my latest "twitter_followers" value and growth compare to the latest date of previous period
-
-"""

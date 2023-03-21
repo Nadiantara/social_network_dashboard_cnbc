@@ -22,6 +22,7 @@ with st.container():
 show_pages(
     [
         Page(f"app/main.py", "Home Page", "🏠"),
+        Page(f"app/all_social_media_overview.py", "All Media Overview", "🏠"),
         Page(f"app/pages/twitter/overview_twitter.py", " Twitter Performance Overview", "🔭"),
         Page(f"app/pages/twitter/twitter_feeds.py", "Twitter Feeds", "👁️"),
         Page(f"app/pages/twitter/text_analysis_twitter.py", "Twitter Text Analysis", "⚖️"),

@@ -140,7 +140,7 @@ def sum_by_group(df, group_col, sum_col):
     return result
 
 @st.cache_data(ttl=300)
-def filtering_wrap(df_tweet, start_date, end_date):
+def filtering_wrap_ig(df_tweet, start_date, end_date):
     # detik's tweet
     tweet_filtered = filter_date_range(df_tweet, "date", start_date, end_date)
     tweet_per_date = count_by_group(tweet_filtered, "date", "post id")
@@ -386,7 +386,7 @@ def calc_period_percent_diff(df):
     return this_period_sum, percent_diff
 
 
-def score_card_wrap(tweet_per_date,tweet_per_date_previous,interactions_per_date,interactions_per_date_previous,
+def score_card_wrap_ig(tweet_per_date,tweet_per_date_previous,interactions_per_date,interactions_per_date_previous,
                     replies_per_date,replies_per_date_previous,
                     impressions_per_date,impressions_per_date_previous,
                     reach_per_date,reach_per_date_previous):
