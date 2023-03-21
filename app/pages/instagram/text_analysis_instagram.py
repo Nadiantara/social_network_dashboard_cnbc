@@ -14,7 +14,7 @@ df_cluster = load_data_instagram_clusters()
 
 cluster_plot = plot_cluster(df_cluster)
 cluster_top_entities_plot = plot_popular_entities_clusters(df_cluster)
-cluster_clicks_plot = cluster_reach(df_cluster)
+cluster_reach_plot = cluster_reach(df_cluster)
 top_entities_impressions = plot_entity_impressions(df_cluster)
 top_entities_interactions = plot_entity_interactions(df_cluster)
 top_published_entities = most_published_entities(df_cluster)
@@ -41,7 +41,7 @@ with col4:
 st.markdown("##### Instagram Text Clusters")     
 st.plotly_chart(cluster_plot)
     
-st.markdown("##### Instagram Clicks per Clusters")   
-st.plotly_chart(cluster_clicks_plot)
+st.markdown("##### Instagram Reach per Clusters")   
+st.plotly_chart(cluster_reach_plot)
 st.markdown("##### Instagram Top Entities per Clusters")   
 st.plotly_chart(cluster_top_entities_plot)
