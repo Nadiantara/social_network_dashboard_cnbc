@@ -34,6 +34,10 @@ def set_feed(data):
 
     for index, row in data.iterrows():
         cont = st.container()
+        c1, c2 = cont.columns(2)
+        c1.markdown('%s ([link](%s))' % ("go to source:", row['link post']))
+        c2.markdown(row['date'])
+        
         cont.markdown('### %s' % row['content'])
 
         col1, col2, col3, col4 = cont.columns(4)
