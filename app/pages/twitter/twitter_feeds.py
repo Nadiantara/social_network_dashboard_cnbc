@@ -58,7 +58,7 @@ def set_feed(data):
 if __name__ == "__main__":
     st.markdown("# Twitter Content Feed")
     start_date = st.sidebar.date_input("Start date", value=date(2023, 3, 4)).strftime("%Y-%m-%d")
-    end_date = st.sidebar.date_input("End date", value=date(2023, 3, 7)).strftime("%Y-%m-%d")
+    end_date = st.sidebar.date_input("End date", value=date(2023, 3, 6)).strftime("%Y-%m-%d")
     sortby = st.sidebar.selectbox(
         "Sort Content By",
         ("Most Popular", "Most Controversial", "Most Clicks")
